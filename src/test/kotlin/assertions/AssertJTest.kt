@@ -28,7 +28,7 @@ class AssertJTest {
                     to contain:
                       "aye"
                     """.trimIndent()
-            assertErrorContains(message) { assertThat("hi").isEqualTo("hi").contains("aye") }
+            assertErrorContains(message) { assertThat("hi").isEqualTo("hi").contains("aye").hasSize(1) }
         }
     }
 
