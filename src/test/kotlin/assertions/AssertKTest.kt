@@ -173,8 +173,66 @@ class AssertKTest {
         }
     }
 
+    @Nested
+    inner class ExtractingValues {
+        private val dishes = listOf(
+            Dish("Keropok", Dish.Type("Appetizer", "Savoury"), setOf("Flour", "Fish")),
+            Dish("Prawn Mee", Dish.Type("Main", "Savoury"), setOf("Prawn", "Noodle")),
+            Dish("Mango Pudding", Dish.Type("Dessert", "Sweet"), setOf("Mango", "Gelatin")),
+        )
+
+        @Test
+        fun `single value per element`() {
+//            AssertK is not able to extract values via String names
+//            assertThat(dishes)
+//                .extracting("name")
+//                .containsExactly("Keropok", "Prawn Mee", "Mango Pudding")
+
+            assertThat(dishes)
+                .extracting(Dish::name).all {
+                    containsExactly("Keropok", "Prawn Mee", "Mango Pudding")
+                    doesNotContain("Brinjal")
+                }
+        }
+
+        @Test
+        fun `multiple values per element`() {
+            assertThat(dishes)
+                .extracting({ it.name }, { it.type.course })
+                .containsExactly(
+                    Pair("Keropok", "Appetizer"),
+                    Pair("Prawn Mee", "Main"),
+                    Pair("Mango Pudding", "Dessert")
+                )
+
+            assertThat(dishes)
+                .extracting(Dish::name, Dish::type)
+                .containsExactly(
+                    Pair("Keropok", Dish.Type("Appetizer", "Savoury")),
+                    Pair("Prawn Mee", Dish.Type("Main", "Savoury")),
+                    Pair("Mango Pudding", Dish.Type("Dessert", "Sweet"))
+                )
+        }
+
+        @Test
+        fun `flattening multiple values per element`() {
+            assertThat(dishes)
+                .extracting(Dish::ingredients)
+                .transform { it.flatten() }
+                .containsExactly(
+                    "Flour", "Fish",
+                    "Prawn", "Noodle",
+                    "Mango", "Gelatin"
+                )
+        }
+    }
+
     private fun assertErrorContains(message: String, assertion: () -> Unit) {
         val exception = assertThrows<AssertionError>(assertion)
         assertEquals(message, exception.message?.trim())
+    }
+
+    data class Dish(val name: String, val type: Type, val ingredients: Set<String>) {
+        data class Type(val course: String, val taste: String)
     }
 }
