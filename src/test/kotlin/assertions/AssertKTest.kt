@@ -3,6 +3,7 @@ package assertions
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import data.Dish
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
@@ -231,9 +232,5 @@ class AssertKTest {
     private fun assertErrorContains(message: String, assertion: () -> Unit) {
         val exception = assertThrows<AssertionError>(assertion)
         assertEquals(message, exception.message?.trim())
-    }
-
-    data class Dish(val name: String, val type: Type, val ingredients: Set<String>) {
-        data class Type(val course: String, val taste: String)
     }
 }

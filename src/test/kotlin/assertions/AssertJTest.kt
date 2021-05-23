@@ -1,5 +1,6 @@
 package assertions
 
+import data.Dish
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.tuple
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -241,9 +242,5 @@ class AssertJTest {
     private fun assertErrorContains(message: String, assertion: () -> Unit) {
         val exception = assertThrows<AssertionError>(assertion)
         assertEquals(message, exception.message?.trim())
-    }
-
-    data class Dish(val name: String, val type: Type, val ingredients: Set<String>) {
-        data class Type(val course: String, val taste: String)
     }
 }
