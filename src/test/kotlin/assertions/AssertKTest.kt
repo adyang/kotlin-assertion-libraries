@@ -204,12 +204,13 @@ class AssertKTest {
                         Pair("Mango Pudding", "Dessert")
                     )
 
+                // AssertK is only able to extract up to 3 values
                 assertThat(dishes)
-                    .extracting(Dish::name, Dish::type)
+                    .extracting(Dish::name, Dish::type, Dish::ingredients)
                     .containsExactly(
-                        Pair("Keropok", Dish.Type("Appetizer", "Savoury")),
-                        Pair("Prawn Mee", Dish.Type("Main", "Savoury")),
-                        Pair("Mango Pudding", Dish.Type("Dessert", "Sweet"))
+                        Triple("Keropok", Dish.Type("Appetizer", "Savoury"), setOf("Flour", "Fish")),
+                        Triple("Prawn Mee", Dish.Type("Main", "Savoury"), setOf("Prawn", "Noodle")),
+                        Triple("Mango Pudding", Dish.Type("Dessert", "Sweet"), setOf("Mango", "Gelatin"))
                     )
             }
 

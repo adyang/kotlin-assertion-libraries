@@ -209,11 +209,11 @@ class AssertJTest {
                     )
 
                 assertThat(dishes)
-                    .extracting(Dish::name, Dish::type)
+                    .extracting(Dish::name, Dish::type, { it.ingredients.first() }, { it.ingredients.last() })
                     .containsExactly(
-                        tuple("Keropok", Dish.Type("Appetizer", "Savoury")),
-                        tuple("Prawn Mee", Dish.Type("Main", "Savoury")),
-                        tuple("Mango Pudding", Dish.Type("Dessert", "Sweet"))
+                        tuple("Keropok", Dish.Type("Appetizer", "Savoury"), "Flour", "Fish"),
+                        tuple("Prawn Mee", Dish.Type("Main", "Savoury"), "Prawn", "Noodle"),
+                        tuple("Mango Pudding", Dish.Type("Dessert", "Sweet"), "Mango", "Gelatin")
                     )
             }
 
